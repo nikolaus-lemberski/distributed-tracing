@@ -84,12 +84,15 @@ curl $ROUTE
 
 ### Grafana traces
 
-Explore -> grafanacloud-lemberski-traces -> Query type "Search"
+Got to Grafana Dashboard and navigate:  
+Explore -> grafanacloud-<username>-traces -> Query type "Search"
 
 -> no traces there
+
+Apply the instrumentation:
 
 ```bash
 oc apply -f k8s/instrumentation.yml
 ```
 
-Uncomment instrumentation annotations in the deployment files and apply again. Make some calls to app-a and check again Grafana.
+Then uncomment the instrumentation annotations in the deployment files and apply again. Make some calls to app-a and check again Grafana.
