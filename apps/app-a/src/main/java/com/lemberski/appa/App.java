@@ -15,18 +15,17 @@ public class App {
     private static final String APP_B = System.getenv().getOrDefault("APP_B", "http://localhost:8081");
 
     public static void main(String[] args) throws URISyntaxException {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(APP_B))
-                .GET()
-                .build();
+        Javalin.create().get("/", ctx -> {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(new URI(APP_B))
+                    .GET()
+                    .build();
 
-        Javalin.create()
-                .get("/", ctx -> {
-                    HttpResponse<String> response = HttpClient
-                            .newHttpClient()
-                            .send(request, BodyHandlers.ofString());
-                    ctx.result("App A <- " + response.body());
-                })
-                .start("0.0.0.0", Integer.valueOf(PORT));
+            HttpResponse<String> response = HttpClient
+                    .newHttpClient()
+                    .send(request, BodyHandlers.ofString());
+
+            ctx.result("App A <- " + response.body());
+        }).start("0.0.0.0", Integer.parseInt(PORT));
     }
 }
