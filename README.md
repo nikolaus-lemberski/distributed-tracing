@@ -85,7 +85,7 @@ curl $ROUTE
 ### Grafana traces
 
 Got to Grafana Dashboard and navigate:  
-Explore -> grafanacloud-<username>-traces -> Query type "Search"
+Explore -> grafanacloud-<youruser>-traces -> Query type "Search"
 
 -> no traces there
 
