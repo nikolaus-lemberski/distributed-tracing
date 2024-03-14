@@ -87,9 +87,7 @@ curl $ROUTE
 Got to Grafana Dashboard and navigate:  
 Explore -> grafanacloud-\<username\>-traces -> Query type "Search"
 
--> no traces there
-
-Apply the instrumentation:
+No traces there. Now apply the instrumentation:
 
 ```bash
 oc apply -f k8s/instrumentation.yml
