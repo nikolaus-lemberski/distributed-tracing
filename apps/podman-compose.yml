@@ -1,0 +1,24 @@
+services:
+  app-a:
+    build: ./app-a
+    image: distributed-tracing-app-a:latest
+    container_name: distributed-tracing-app-a
+    ports:
+      - "3000:8080"
+    networks:
+      - apps
+    environment:
+      PORT: 8080
+      APP_B: http://distributed-tracing-app-b:8080
+  service-b:
+    build: ./app-b
+    image: distributed-tracing-app-b:latest
+    container_name: distributed-tracing-app-b
+    ports:
+      - "3001:8080"
+    networks:
+      - apps
+    environment:
+      PORT: 8080
+networks:
+  apps: {}

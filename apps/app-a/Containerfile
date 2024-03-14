@@ -1,0 +1,16 @@
+# Build
+FROM registry.access.redhat.com/ubi9/openjdk-17 as builder
+
+COPY pom.xml .
+COPY src src
+
+RUN mvn -B package
+
+# Run
+FROM registry.access.redhat.com/ubi9/openjdk-17-runtime
+
+COPY --from=builder /home/default/target/app-a-1.0.0-SNAPSHOT-jar-with-dependencies.jar /home/default/app-a.jar
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "/home/default/app-a.jar"]

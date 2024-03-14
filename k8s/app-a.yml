@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: app-a
+    app.kubernetes.io/component: app-a
+    app.kubernetes.io/instance: app-a
+    app.kubernetes.io/part-of: apps
+    app.openshift.io/runtime: redhat
+  name: app-a
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-a
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: app-a
+        version: v1
+      annotations:
+        sidecar.opentelemetry.io/inject: "true"
+        instrumentation.opentelemetry.io/inject-java: "true"
+    spec:
+      containers:
+        - image: quay.io/nlembers/distributed-tracing-app-a:latest
+          imagePullPolicy: Always
+          name: app-a
+          env:
+            - name: PORT
+              value: "8080"
+            - name: APP_B
+              value: "http://app-b:8080"
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+          securityContext:
+            privileged: false
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            capabilities:
+              drop: ["ALL"]
+            seccompProfile:
+              type: RuntimeDefault
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: app-a
+  name: app-a
+spec:
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: app-a
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  labels:
+    app: app-a
+  name: app-a
+spec:
+  port:
+    targetPort: http
+  to:
+    kind: Service
+    name: app-a
+    weight: 100
+  wildcardPolicy: None
