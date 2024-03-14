@@ -9,7 +9,7 @@ One option is using the free tier of Grafana cloud; free tier is enough for test
 Make endpoint data of Tempo available via environment variables:
 
 ```bash
-export TEMPO_URL=tempo-eu-west-0.grafana.net:443
+export TEMPO_URL=<tempourl>
 export TEMPO_USER=<userid>
 export TEMPO_APIKEY=<apikey>
 ```
