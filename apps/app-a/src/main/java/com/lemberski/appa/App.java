@@ -20,7 +20,7 @@ public class App {
                 .GET()
                 .build();
 
-        Javalin.create(/* config */)
+        Javalin.create()
                 .get("/", ctx -> {
                     HttpResponse<String> response = HttpClient
                             .newHttpClient()
