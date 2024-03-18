@@ -106,9 +106,9 @@ Create the instrumentation resource:
 oc apply -f k8s/instrumentation.yml
 ```
 
-Still no traces. Now we add the annotations so the apps are instrumeted. We instrument only app-a and app-b, for app-c we use the OpenTelemetry Quarkus library (we could instrument the Quarkus app as well, but we want to show that you can mix and match apps with and without metrics).
+Still no traces. Now we add the annotations so the apps are instrumented. We instrument only app-a and app-b, for app-c we use the OpenTelemetry Quarkus library (we could instrument the Quarkus app as well, but we want to show that you can mix and match apps with and without OpenTelemetry).
 
-Set the opentelemetry annotations in *./k8s/app-a.yml* and *./k8s/app-b.yml* (lines 24 and 25) to *"true"*. Then configure the sampler of the Quarkus app (app-c) to sending 100% of the traces: *./k8s/app-c.yml* line 35, new value *1.0*. Then apply the deployment files again:
+Set the opentelemetry annotations in **./k8s/app-a.yml** and **./k8s/app-b.yml** (lines 24 and 25) to **"true"**. Then configure the sampler of the Quarkus app (app-c) to sending 100% of the traces: **./k8s/app-c.yml** line 35, new value **1.0**. Then apply the deployment files again:
 
 ```bash
 oc apply -f k8s/app-a.yml
