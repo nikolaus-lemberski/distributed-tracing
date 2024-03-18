@@ -10,7 +10,7 @@ services:
     environment:
       PORT: 8080
       APP_B: http://distributed-tracing-app-b:8080
-  service-b:
+  app-b:
     build: ./app-b
     image: distributed-tracing-app-b:latest
     container_name: distributed-tracing-app-b
@@ -20,5 +20,17 @@ services:
       - apps
     environment:
       PORT: 8080
+      APP_C: http://distributed-tracing-app-c:8080
+  app-c:
+    build: ./app-c
+    image: distributed-tracing-app-c:latest
+    container_name: distributed-tracing-app-c
+    ports:
+      - "3002:8080"
+    networks:
+      - apps
+    environment:
+      QUARKUS_HTTP_PORT: 8080
+      QUARKUS_OTEL_TRACES_SAMPLER_ARG: 0.0
 networks:
   apps: {}

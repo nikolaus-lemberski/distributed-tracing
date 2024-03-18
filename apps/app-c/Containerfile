@@ -1,0 +1,21 @@
+# Build
+FROM registry.access.redhat.com/ubi9/openjdk-17 as builder
+
+COPY pom.xml .
+COPY src src
+
+RUN mvn package
+
+# Run
+FROM registry.access.redhat.com/ubi8/openjdk-21:1.18
+
+COPY --from=builder --chown=185 /home/default/target/quarkus-app/lib/ /deployments/lib/
+COPY --from=builder --chown=185 /home/default/target/quarkus-app/*.jar /deployments/
+COPY --from=builder --chown=185 /home/default/target/quarkus-app/app/ /deployments/app/
+COPY --from=builder --chown=185 /home/default/target/quarkus-app/quarkus/ /deployments/quarkus/
+
+EXPOSE 8080
+USER 185
+ENV JAVA_APP_JAR="/deployments/quarkus-run.jar"
+
+ENTRYPOINT [ "/opt/jboss/container/java/run/run-java.sh" ]

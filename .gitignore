@@ -1,4 +1,5 @@
 .DS_Store
+*.drawio.bkp
 
 HELP.md
 target/

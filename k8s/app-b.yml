@@ -20,9 +20,9 @@ spec:
       labels:
         app: app-b
         version: v1
-      #annotations:
-      #  sidecar.opentelemetry.io/inject: "true"
-      #  instrumentation.opentelemetry.io/inject-java: "true"
+      annotations:
+        sidecar.opentelemetry.io/inject: "false"
+        instrumentation.opentelemetry.io/inject-java: "false"
     spec:
       containers:
         - image: quay.io/nlembers/distributed-tracing-app-b:latest
