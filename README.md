@@ -6,7 +6,7 @@ We have the following apps:
 
 ![The apps](./readme/apps.png "The apps")
 
-Each app responds with it's name and we simulate a downstream service call, so app-a calls app-b and app-b calls app-c, adding the response of the downstream call to the output. So calling the app-a endpoint should return:
+Each app responds with it's name and we do a downstream service call, so app-a calls app-b and app-b calls app-c, adding the response of the downstream call to the output. So calling the app-a endpoint should return:
 
 > App A <- App B <- App C
 
