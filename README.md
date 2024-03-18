@@ -38,9 +38,15 @@ oc new-project demo
 
 ### Create collector instance
 
+Encode the token for Tempo:
+
 ```bash
 export TEMPO_TOKEN=`echo -n "$TEMPO_USER:$TEMPO_APIKEY" | base64`
+```
 
+Then create the Collector:
+
+```bash
 cat <<EOF |oc apply -f -
 apiVersion: opentelemetry.io/v1alpha1
 kind: OpenTelemetryCollector
