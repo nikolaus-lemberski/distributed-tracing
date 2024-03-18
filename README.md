@@ -26,7 +26,9 @@ export TEMPO_APIKEY=<apikey>
 
 ### Setup OpenTelemetry
 
-In OpenShift, install the OpenTelemetry operator from Operator Hub and accept the defaults.
+In OpenShift, install the **Red Hat build of OpenTelemetry** operator from Operator Hub and accept the defaults.
+
+![OpenTelemetry Operator](./readme/grafana-traces.png "OpenTelemetry Operator")
 
 ### Create new project
 
