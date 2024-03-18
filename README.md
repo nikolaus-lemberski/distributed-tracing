@@ -38,7 +38,7 @@ oc new-project demo
 
 ### Create collector instance
 
-Encode the token for Tempo:
+Encode the token for Tempo and set it as environment variable:
 
 ```bash
 export TEMPO_TOKEN=`echo -n "$TEMPO_USER:$TEMPO_APIKEY" | base64`
