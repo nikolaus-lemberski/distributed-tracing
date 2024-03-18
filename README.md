@@ -116,4 +116,6 @@ oc apply -f k8s/app-b.yml
 oc apply -f k8s/app-c.yml
 ```
 
+If you inspect the pods of app-a and app-b, you can see that the Java agent for the instrumentation is added via JAVA_TOOL_OPTIONS. An init container copied the javaagent.jar to the pod volume.
+
 Make some calls to the app-a endpoint and check again Grafana. Traces should be there now.
