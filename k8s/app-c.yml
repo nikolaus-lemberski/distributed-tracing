@@ -32,7 +32,7 @@ spec:
             - name: QUARKUS_HTTP_PORT
               value: "8080"
             - name: QUARKUS_OTEL_TRACES_SAMPLER_ARG
-              value: 0.0
+              value: "0.0"
           ports:
             - containerPort: 8080
               name: http
