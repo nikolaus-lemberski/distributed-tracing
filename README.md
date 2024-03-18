@@ -74,7 +74,7 @@ spec:
 EOF
 ```
 
-Check logs with `oc logs deployment/otel-collector`
+We're using the **deployment** mode here, other options like **sidecar** are also available. Check the status of the deployment `oc get deploy -w` and when it's ready, have a look at the logs with `oc logs deployment/otel-collector`.
 
 ## Testing with apps
 
