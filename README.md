@@ -4,9 +4,7 @@ Simple example of distributed tracing with OpenTelemetry. Tracing backend Grafan
 
 We have the following apps:
 
-* app-a (Java/Javalin)
-* app-b (Java/Javalin)
-* app-c (Java/Quarkus)
+![The apps](./readme/apps.png "The apps")
 
 Each app responds with it's name and we simulate a downstream service call, so app-a calls app-b and app-b calls app-c, adding the response of the downstream call to the output. So calling the app-a endpoint should return:
 
@@ -77,8 +75,6 @@ EOF
 Check logs with `oc logs deployment/otel-collector`
 
 ## Testing with apps
-
-![The apps](./readme/apps.png "The apps")
 
 ### Deploy sample apps
 
