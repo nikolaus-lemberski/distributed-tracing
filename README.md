@@ -118,4 +118,6 @@ oc apply -f k8s/app-c.yml
 
 If you inspect the pods of app-a and app-b, you can see that the Java agent for the instrumentation is added via JAVA_TOOL_OPTIONS. An init container copied the javaagent.jar to the pod volume. app-c has no Java agent, as the Quarkus app itself sends the metrics to the collector and we haven't applied the instrumentation to app-c.
 
-Make some calls to the app-a endpoint and check again Grafana. Traces should be there now.
+Make some calls to the app-a endpoint and check again Grafana. Now you should be able to see the traces for the apps:
+
+![Traces](./readme/grafana-traces.png "Traces in Grafana UI")
