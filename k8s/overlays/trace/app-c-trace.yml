@@ -1,0 +1,15 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-c
+spec:
+  template:
+    spec:
+      containers:
+        - name: app-c
+          env:
+            - name: QUARKUS_HTTP_PORT
+              value: "8080"
+            - name: QUARKUS_OTEL_TRACES_SAMPLER_ARG
+              value: "1.0"
+          

@@ -97,9 +97,7 @@ oc logs deployment/otel-collector
 ### Deploy sample apps
 
 ```bash
-oc apply -f k8s/app-a.yml
-oc apply -f k8s/app-b.yml
-oc apply -f k8s/app-c.yml
+oc apply -k k8s/base
 ```
 
 ### Test sample app
@@ -118,23 +116,13 @@ No traces to find. Now we want to change that so we have metrics flowing to Graf
 
 ![Sending metrics](./readme/tempo-grafana.png "Sending metrics to Grafana / Tempo")
 
-Create the instrumentation resource:
+Apply the kustomizations for tracing - the instrumentation resources, the annotations to trigger the instrumentation in app-a and app-b and the change of the sampler ratio of the Quarkus app-c from 0% to 100%.
 
 ```bash
-oc apply -f k8s/instrumentation.yml
+oc apply -k k8s/overlays/trace
 ```
 
-Still no traces. Now we add the annotations so the apps are instrumented. We instrument only app-a and app-b, for app-c we use the OpenTelemetry Quarkus library (we could instrument the Quarkus app as well, but we want to show that you can mix and match apps with and without OpenTelemetry).
-
-Set the opentelemetry annotations in **./k8s/app-a.yml** and **./k8s/app-b.yml** (lines 24 and 25) to **"true"**. Then configure the sampler of the Quarkus app (app-c) to sending 100% of the traces: **./k8s/app-c.yml** line 35, new value **"1.0"**. Then apply the deployment files again:
-
-```bash
-oc apply -f k8s/app-a.yml
-oc apply -f k8s/app-b.yml
-oc apply -f k8s/app-c.yml
-```
-
-If you inspect the pods of app-a and app-b, you can see that the Java agent for the instrumentation is added via JAVA_TOOL_OPTIONS. An init container copied the javaagent.jar to the pod volume. app-c has no Java agent, as the Quarkus app itself sends the metrics to the collector and we haven't applied the instrumentation to app-c.
+If you inspect the pods of app-a and app-b, you can see that the Java agent for the instrumentation is added via **JAVA_TOOL_OPTIONS**. An init container copied the javaagent.jar to the pod volume. app-c has no Java agent, as the Quarkus app itself sends the metrics to the collector and we haven't applied the instrumentation to app-c.
 
 Make some calls to the app-a endpoint and check again Grafana. Now you should be able to see the traces for the apps:
 
