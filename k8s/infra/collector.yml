@@ -1,0 +1,29 @@
+apiVersion: opentelemetry.io/v1alpha1
+kind: OpenTelemetryCollector
+metadata:
+  name: otel
+spec:
+  config: |
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+          http:
+    processors:
+      batch:
+    exporters:
+      logging:
+        loglevel: info
+      otlp:
+        endpoint: ${TEMPO_URL}
+        headers:
+          authorization: Basic ${TEMPO_TOKEN}
+    service:
+      pipelines:
+        traces:
+          receivers: [otlp]
+          processors: [batch]
+          exporters: [logging,otlp]
+  mode: deployment
+  resources: {}
+  targetAllocator: {}

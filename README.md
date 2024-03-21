@@ -14,14 +14,6 @@ Each app responds with it's name and we do a downstream service call, so app-a c
 
 One option is using the free tier of Grafana cloud; free tier is enough for testing, if no sensitive data is transferred. Alternatively, [setup Grafana / Tempo stack on OpenShift](https://docs.openshift.com/container-platform/4.14/distr_tracing/distr_tracing_tempo/distr-tracing-tempo-installing.html).
 
-Make endpoint data of Tempo available via environment variables:
-
-```bash
-export TEMPO_URL=<tempourl>
-export TEMPO_USER=<userid>
-export TEMPO_APIKEY=<apikey>
-```
-
 ## Configure OpenShift
 
 ### Setup OpenTelemetry
@@ -38,49 +30,26 @@ oc new-project demo
 
 ### Create collector instance
 
-Encode the token for Tempo and set it as environment variable:
+Make endpoint data of Tempo available via environment variables:
 
 ```bash
+export TEMPO_URL=<tempourl>
+export TEMPO_USER=<userid>
+export TEMPO_APIKEY=<apikey>
 export TEMPO_TOKEN=`echo -n "$TEMPO_USER:$TEMPO_APIKEY" | base64`
 ```
 
 Then create the Collector:
 
 ```bash
-cat <<EOF |oc apply -f -
-apiVersion: opentelemetry.io/v1alpha1
-kind: OpenTelemetryCollector
-metadata:
-  name: otel
-spec:
-  config: |
-    receivers:
-      otlp:
-        protocols:
-          grpc:
-          http:
-    processors:
-      batch:
-    exporters:
-      logging:
-        loglevel: info
-      otlp:
-        endpoint: ${TEMPO_URL}
-        headers:
-          authorization: Basic ${TEMPO_TOKEN}
-    service:
-      pipelines:
-        traces:
-          receivers: [otlp]
-          processors: [batch]
-          exporters: [logging,otlp]
-  mode: deployment
-  resources: {}
-  targetAllocator: {}
-EOF
+envsubst < k8s/infra/collector.yml | oc apply -f -
 ```
 
-We're using the **deployment** mode here, other options like **sidecar** are also available. Check the status of the deployment
+If you don't have *envsubst*, use *yq* or edit the file to set the Tempo URL and Token before applying.
+
+We're using the **deployment** mode of the collector here, other options like **sidecar** are also available. 
+
+Check the status of the deployment:
 
 ```bash
 oc get deploy -w
