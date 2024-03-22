@@ -10,7 +10,7 @@ Each app responds with it's name and we do a downstream service call, so app-a c
 
 > App A <- App B <- App C
 
-## Setup Grafana Tempo
+## Setup Tempo
 
 ### Option A: Grafana Cloud
 
@@ -153,7 +153,7 @@ Make some calls to the app-a endpoint and check again Grafana. Now you should be
 
 ![Traces](./readme/grafana-traces.png "Traces in Grafana UI")
 
-#### Option B: Tempostack Jager UI
+#### Option B: Tempostack Jaeger UI
 
 With the Tempo stack operator comes Jaeger UI (you could also configure Grafana UI). Our desired flow of the metrics is:
 
