@@ -52,7 +52,7 @@ oc create -f k8s/infra/tempo-stack.yml
 
 When all pods are running, check the Route `oc get route` and open in the Browser (Jaeger UI).
 
-## Configure OpenShift
+## Setup OpenTelemetry and sample apps
 
 ### Setup OpenTelemetry
 
