@@ -155,7 +155,9 @@ Make some calls to the app-a endpoint and check again Grafana. Now you should be
 
 #### Option B: Tempostack Jager UI
 
-With the Tempo stack operator comes Jaeger UI (you could also configure Grafana UI).
+With the Tempo stack operator comes Jaeger UI (you could also configure Grafana UI). Our desired flow of the metrics is:
+
+![Sending metrics](./readme/tempo-jaeger.png "Sending metrics to Tempo with Jaeger UI")
 
 If not done already, apply the kustomizations for the tracing:
 
