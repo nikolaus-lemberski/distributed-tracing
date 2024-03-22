@@ -12,7 +12,45 @@ Each app responds with it's name and we do a downstream service call, so app-a c
 
 ## Setup Grafana Tempo
 
+### Option A: Grafana Cloud
+
 One option is using the free tier of Grafana cloud; free tier is enough for testing, if no sensitive data is transferred. Alternatively, [setup Grafana / Tempo stack on OpenShift](https://docs.openshift.com/container-platform/4.15/observability/distr_tracing/distr_tracing_tempo/distr-tracing-tempo-installing.html).
+
+### Option B: Distributed Tracing stack on OpenShift
+
+#### Step 1: Setup storage
+
+[MinIO instructions](https://min.io/docs/minio/kubernetes/upstream/index.html)
+
+```bash
+oc create -f k8s/infra/minio-dev.yml
+```
+
+Do not use this MinIO configuration for production workloads!
+
+Now use port-forwarding to open the MinIO UI:
+
+```bash
+oc port-forward pod/minio 9000 9090 -n minio-dev
+```
+
+Open http://localhost:9000 in a Browser, login with minioadmin / minioadmin, create a bucket and an API key. For simplicity reasons create a bucket "tempostorage" and an access key "tempostorage" with secret key "tempostorage". Again, do not do that for production workloads.
+
+#### Step 2: Tempo operator
+
+```bash
+oc create -f k8s/infra/tempo-operator.yml
+```
+
+When installed and ready, create a new project for the tempo stack instance with the secret for the MinIO bucket from Step 1 and the tempostack instance.
+
+```bash
+oc new-project tempostack
+oc create -f k8s/infra/minio-secret.yml
+oc create -f k8s/infra/tempo-stack.yml
+```
+
+When all pods are running, check the Route `oc get route` and open in the Browser (Jaeger UI).
 
 ## Configure OpenShift
 
@@ -34,6 +72,8 @@ oc new-project demo
 
 ### Create collector instance
 
+#### Option A: Collector with Grafana Cloud
+
 Make endpoint data of Tempo available via environment variables:
 
 ```bash
@@ -50,6 +90,14 @@ envsubst < k8s/infra/collector.yml | oc apply -f -
 ```
 
 If you don't have *envsubst*, use *yq* or edit the file to set the Tempo URL and Token before applying.
+
+#### Option B: Collector with Tempostack
+
+```bash
+oc create -f k8s/infra/tempostack-collector.yml
+```
+
+#### Checking the state of the collector
 
 We're using the **deployment** mode of the collector here, other options like **sidecar** are also available. 
 
@@ -80,7 +128,9 @@ export ROUTE=http://$(oc get route app-a -o jsonpath='{.spec.host}')
 curl $ROUTE
 ```
 
-### Grafana traces
+### Checking the traces
+
+#### Option A: Grafana Cloud
 
 Got to Grafana Dashboard and navigate:  
 Explore -> grafanacloud-\<username\>-traces -> Query type "Search"
@@ -95,8 +145,24 @@ Apply the kustomizations for tracing - the instrumentation resources, the annota
 oc apply -k k8s/overlays/trace
 ```
 
-If you inspect the pods of app-a and app-b, you can see that the Java agent for the instrumentation is added via **JAVA_TOOL_OPTIONS**. An init container copied the javaagent.jar to the pod volume. app-c has no Java agent, as the Quarkus app itself sends the metrics to the collector and we haven't applied the instrumentation to app-c.
+If you inspect the pods of app-a and app-b, you can see that the Java agent for the instrumentation is added via **JAVA_TOOL_OPTIONS**. An init container copied the javaagent.jar to the pod volume. app-c has no Java agent, as the Quarkus app itself sends the metrics to the collector and we haven't applied the instrumentation to app-c. 
+
+Hint: If the javaagent is missing but the annotations are there, simply delete the pods so they're recreated.
 
 Make some calls to the app-a endpoint and check again Grafana. Now you should be able to see the traces for the apps:
 
 ![Traces](./readme/grafana-traces.png "Traces in Grafana UI")
+
+#### Option B: Tempostack Jager UI
+
+With the Tempo stack operator comes Jaeger UI (you could also configure Grafana UI).
+
+If not done already, apply the kustomizations for the tracing:
+
+```bash
+oc apply -k k8s/overlays/trace
+```
+
+Open the Jeager UI (`oc get route -n tempostack`) in a Browser, select app-a and click on "Find traces". You should see the distributed tracing information:
+
+![Traces](./readme/jaeger-traces.png "Traces in Jaeger UI")
