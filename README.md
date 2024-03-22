@@ -86,7 +86,7 @@ export TEMPO_TOKEN=`echo -n "$TEMPO_USER:$TEMPO_APIKEY" | base64`
 Then create the Collector:
 
 ```bash
-envsubst < k8s/infra/collector.yml | oc apply -f -
+envsubst < k8s/infra/grafanacloud-collector.yml | oc apply -f -
 ```
 
 If you don't have *envsubst*, use *yq* or edit the file to set the Tempo URL and Token before applying.
