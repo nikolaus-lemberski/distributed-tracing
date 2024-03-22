@@ -14,7 +14,7 @@ Each app responds with it's name and we do a downstream service call, so app-a c
 
 ### Option A: Grafana Cloud
 
-One option is using the free tier of Grafana cloud; free tier is enough for testing, if no sensitive data is transferred. Alternatively, [setup Grafana / Tempo stack on OpenShift](https://docs.openshift.com/container-platform/4.15/observability/distr_tracing/distr_tracing_tempo/distr-tracing-tempo-installing.html).
+One option is using the free tier of Grafana cloud; free tier is enough for testing, if no sensitive data is transferred. Alternatively, [setup Distributed Tracing Tempo stack on OpenShift](https://docs.openshift.com/container-platform/4.15/observability/distr_tracing/distr_tracing_tempo/distr-tracing-tempo-installing.html) (Option B).
 
 ### Option B: Distributed Tracing stack on OpenShift
 
