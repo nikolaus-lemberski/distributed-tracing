@@ -163,6 +163,6 @@ If not done already, apply the kustomizations for the tracing:
 oc apply -k k8s/overlays/trace
 ```
 
-Open the Jeager UI (`oc get route -n tempostack`) in a Browser, select app-a and click on "Find traces". You should see the distributed tracing information:
+Now call the app-a endpoint to generate some traces, open the Jeager UI (`oc get route -n tempostack`) in a Browser, select app-a and click on "Find traces". You should see the distributed tracing information:
 
 ![Traces](./readme/jaeger-traces.png "Traces in Jaeger UI")
