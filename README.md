@@ -1,6 +1,6 @@
 # Distributed Tracing with OpenTelemetry
 
-Simple example of distributed tracing with OpenTelemetry. Tracing backend Grafana Cloud, apps running on OpenShift with OpenTelemetry Operator for instrumenting the apps and collecting the traces.
+Simple example of distributed tracing with OpenTelemetry. Tracing backend Tempo/Grafana or Tempo/Jaeger UI, apps running on OpenShift with OpenTelemetry Operator for instrumenting the apps and collecting the traces. Tracing backend Grafana Cloud or Tempo instance on OpenShift.
 
 We have the following apps:
 
