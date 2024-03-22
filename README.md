@@ -91,7 +91,7 @@ envsubst < k8s/infra/grafanacloud-collector.yml | oc apply -f -
 
 If you don't have *envsubst*, use *yq* or edit the file to set the Tempo URL and Token before applying.
 
-#### Option B: Collector with Tempostack
+#### Option B: Collector with Tempostack on OpenShift
 
 ```bash
 oc create -f k8s/infra/tempostack-collector.yml
