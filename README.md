@@ -12,15 +12,19 @@ Each app responds with it's name and we do a downstream service call, so app-a c
 
 ## Setup Grafana Tempo
 
-One option is using the free tier of Grafana cloud; free tier is enough for testing, if no sensitive data is transferred. Alternatively, [setup Grafana / Tempo stack on OpenShift](https://docs.openshift.com/container-platform/4.14/distr_tracing/distr_tracing_tempo/distr-tracing-tempo-installing.html).
+One option is using the free tier of Grafana cloud; free tier is enough for testing, if no sensitive data is transferred. Alternatively, [setup Grafana / Tempo stack on OpenShift](https://docs.openshift.com/container-platform/4.15/observability/distr_tracing/distr_tracing_tempo/distr-tracing-tempo-installing.html).
 
 ## Configure OpenShift
 
 ### Setup OpenTelemetry
 
-In OpenShift, install the **Red Hat build of OpenTelemetry** operator from Operator Hub and accept the defaults.
+Login to your OpenShift cluster and install the OpenTelemetry operator:
 
-![OpenTelemetry Operator](./readme/open-telemetry-operator.png "OpenTelemetry Operator")
+```bash
+oc create -f k8s/infra/opentelemetry-operator.yml
+```
+
+Alternatively install via OpenShift UI the **Red Hat build of OpenTelemetry** operator from Operator Hub and accept the defaults.
 
 ### Create new project
 
