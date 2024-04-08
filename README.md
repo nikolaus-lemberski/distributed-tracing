@@ -12,11 +12,11 @@ Each app responds with it's name and we do a downstream service call, so app-a c
 
 ## Setup Tempo
 
-### Option A: Grafana Cloud
+### _Option A:_ Grafana Cloud
 
 One option is using the free tier of Grafana Cloud; free tier is enough for testing, if no sensitive data is transferred. Alternatively, [setup Distributed Tracing Tempo stack on OpenShift](https://docs.openshift.com/container-platform/4.15/observability/distr_tracing/distr_tracing_tempo/distr-tracing-tempo-installing.html) (Option B).
 
-### Option B: Distributed Tracing stack on OpenShift
+### _Option B:_ Distributed Tracing stack on OpenShift
 
 #### Step 1: Setup storage
 
@@ -72,7 +72,7 @@ oc new-project demo
 
 ### Create collector instance
 
-#### Option A: Collector sending to Grafana Cloud
+#### _Option A:_ Collector sending to Grafana Cloud
 
 Make endpoint data of Tempo available via environment variables:
 
@@ -91,7 +91,7 @@ envsubst < k8s/infra/grafanacloud-collector.yml | oc apply -f -
 
 If you don't have *envsubst*, use *yq* or edit the file to set the Tempo URL and Token before applying.
 
-#### Option B: Collector sending to Tempostack on OpenShift
+#### _Option B:_ Collector sending to Tempostack on OpenShift
 
 ```bash
 oc create -f k8s/infra/tempostack-collector.yml
@@ -130,7 +130,7 @@ curl $ROUTE
 
 ### Checking the traces
 
-#### Option A: Grafana Cloud
+#### _Option A:_ Grafana Cloud
 
 Got to Grafana Dashboard and navigate:  
 Explore -> grafanacloud-\<username\>-traces -> Query type "Search"
@@ -153,7 +153,7 @@ Make some calls to the app-a endpoint and check again Grafana. Now you should be
 
 ![Traces](./readme/grafana-traces.png "Traces in Grafana UI")
 
-#### Option B: Tempostack Jaeger UI
+#### _Option B:_ Tempostack Jaeger UI
 
 With the Tempo stack operator comes Jaeger UI (you could also configure Grafana UI). Our desired flow of the metrics is:
 
