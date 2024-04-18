@@ -5,6 +5,19 @@ metadata:
   labels:
     name: minio-dev
 ---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: minio
+  namespace: minio-dev
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  volumeMode: Filesystem
+---
 apiVersion: v1
 kind: Pod
 metadata:
@@ -23,7 +36,7 @@ spec:
         - minio server /data --console-address :9090
       volumeMounts:
         - mountPath: /data
-          name: localvolume
+          name: data
       securityContext:
         privileged: false
         allowPrivilegeEscalation: false
@@ -33,8 +46,9 @@ spec:
         seccompProfile:
           type: RuntimeDefault
   volumes:
-    - name: localvolume
-      emptyDir: {}
+    - name: data
+      persistentVolumeClaim:
+        claimName: minio
 ---
 apiVersion: v1
 kind: Service
@@ -43,6 +57,7 @@ metadata:
   labels:
     app: minio
   name: minio
+  namespace: minio-dev
 spec:
   ports:
   - port: 9000

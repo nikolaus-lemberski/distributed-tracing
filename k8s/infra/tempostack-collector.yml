@@ -8,8 +8,8 @@ kind: ClusterRole
 metadata:
   name: otel-collector
 rules:
-  - apiGroups: ["", "config.openshift.io"]
-    resources: ["pods", "namespaces", "infrastructures", "infrastructures/status"]
+  - apiGroups: ["", "config.openshift.io", "apps"]
+    resources: ["pods", "namespaces", "replicasets", "infrastructures", "infrastructures/status"]
     verbs: ["get", "watch", "list"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1

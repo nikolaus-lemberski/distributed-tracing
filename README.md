@@ -47,7 +47,7 @@ When installed and ready, create a new project for the tempo stack instance with
 ```bash
 oc new-project tempostack
 oc create -f k8s/infra/minio-secret.yml
-oc create -f k8s/infra/tempo-stack.yml
+oc create -f k8s/infra/tempostack.yml
 ```
 
 When all pods are running, check the Route `oc get route` and open in the Browser (Jaeger UI).
@@ -158,6 +158,12 @@ Make some calls to the app-a endpoint and check again Grafana. Now you should be
 With the Tempo stack operator comes Jaeger UI (you could also configure Grafana UI). Our desired flow of the metrics is:
 
 ![Sending metrics](./readme/tempo-jaeger.png "Sending metrics to Tempo with Jaeger UI")
+
+You can find the URL to Jaeger UI with:
+
+```bash
+oc get route -n tempostack
+```
 
 If not done already, apply the kustomizations for the tracing:
 

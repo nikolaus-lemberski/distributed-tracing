@@ -31,7 +31,7 @@ public class App {
                 appB = e.toString();
             }
 
-            ctx.result("App A <- " + appB);
+            ctx.result("App A <- " + appB + "\n");
         }).start("0.0.0.0", Integer.parseInt(PORT));
     }
 }
