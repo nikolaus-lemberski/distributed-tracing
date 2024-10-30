@@ -23,18 +23,12 @@ One option is using the free tier of Grafana Cloud; free tier is enough for test
 [MinIO instructions](https://min.io/docs/minio/kubernetes/upstream/index.html)
 
 ```bash
-oc create -f k8s/infra/minio-dev.yml
+oc create -f k8s/infra/minio.yml
 ```
 
 Do not use this MinIO configuration for production workloads!
 
-Now use port-forwarding to open the MinIO UI:
-
-```bash
-oc port-forward pod/minio 9000 9090 -n minio-dev
-```
-
-Open http://localhost:9000 in a Browser, login with minioadmin / minioadmin, create a bucket and an API key. For simplicity reasons create a bucket "tempostorage" and an access key "tempostorage" with secret key "tempostorage". Again, do not do that for production workloads.
+Check the Route for your MinIO installation and open the console route in your browser. Login with minioadmin / minioadmin, create a bucket and an API key. For simplicity reasons create a bucket "tempostorage" and an access key "tempostorage" with secret key "tempostorage". Again, do not do that for production workloads.
 
 #### Step 2: Tempo operator
 
