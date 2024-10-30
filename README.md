@@ -18,7 +18,13 @@ One option is using the free tier of Grafana Cloud; free tier is enough for test
 
 ### _Option B:_ Distributed Tracing stack on OpenShift
 
-#### Step 1: Setup storage 
+#### Step 1: Tempo operator
+
+```bash
+oc create -f k8s/infra/tempo-operator.yml
+```
+
+#### Step 2: Setup storage and TempoStak
 
 Use MinIO __OR__ ODF (recommended).
 
@@ -33,6 +39,13 @@ oc create -f k8s/infra/minio.yml
 Do not use this MinIO configuration for production workloads!
 
 Check the Route for your MinIO installation and open the console route in your browser. Login with minioadmin / minioadmin, create a bucket and an API key. For simplicity reasons create a bucket "tempostorage" and an access key "tempostorage" with secret key "tempostorage". Again, do not do that for production workloads.
+
+```bash
+oc new-project tempostack
+export AWS_ACCESS_KEY_ID="tempostorage"
+export AWS_SECRET_ACCESS_KEY="tempostorage""
+envsubst < k8s/infra/tempostack.yml | oc apply -f -
+```
 
 ##### ODF (recommended)
 
@@ -50,19 +63,7 @@ export AWS_SECRET_ACCESS_KEY=$(oc get secret tempostorage -o jsonpath='{.data.AW
 envsubst < k8s/infra/tempostack.yml | oc apply -f -
 ```
 
-#### Step 2: Tempo operator
-
-```bash
-oc create -f k8s/infra/tempo-operator.yml
-```
-
-When installed and ready, create a new project for the tempo stack instance with the secret for the MinIO bucket from Step 1 and the tempostack instance.
-
-```bash
-oc new-project tempostack
-oc create -f k8s/infra/minio-secret.yml
-oc create -f k8s/infra/tempostack.yml
-```
+#### Open Jaeger UI
 
 When all pods are running, check the Route `oc get route` and open in the Browser (Jaeger UI).
 
