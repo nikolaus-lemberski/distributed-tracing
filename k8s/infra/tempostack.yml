@@ -4,7 +4,7 @@ metadata:
   name: s3-bucket
   namespace: tempostack
 stringData:
-  endpoint: http://s3.openshift-storage.svc
+  endpoint: ${S3_ENDPOINT}
   bucket: "tempostorage"
   access_key_id: ${AWS_ACCESS_KEY_ID}
   access_key_secret: ${AWS_SECRET_ACCESS_KEY}
