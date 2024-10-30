@@ -24,7 +24,7 @@ One option is using the free tier of Grafana Cloud; free tier is enough for test
 oc create -f k8s/infra/tempo-operator.yml
 ```
 
-#### Step 2: Setup storage and TempoStak
+#### Step 2: Setup storage and TempoStack
 
 Use MinIO __OR__ ODF (recommended).
 
