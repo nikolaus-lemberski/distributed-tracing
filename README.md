@@ -18,7 +18,11 @@ One option is using the free tier of Grafana Cloud; free tier is enough for test
 
 ### _Option B:_ Distributed Tracing stack on OpenShift
 
-#### Step 1: Setup storage
+#### Step 1: Setup storage 
+
+Use MinIO __OR__ ODF (recommended).
+
+##### MinIO
 
 [MinIO instructions](https://min.io/docs/minio/kubernetes/upstream/index.html)
 
@@ -29,6 +33,22 @@ oc create -f k8s/infra/minio.yml
 Do not use this MinIO configuration for production workloads!
 
 Check the Route for your MinIO installation and open the console route in your browser. Login with minioadmin / minioadmin, create a bucket and an API key. For simplicity reasons create a bucket "tempostorage" and an access key "tempostorage" with secret key "tempostorage". Again, do not do that for production workloads.
+
+##### ODF (recommended)
+
+Create a bucketclaim
+
+```bash
+oc create -f k8s/infra/bucketclaim.yml
+```
+
+Then read the generated access keys and create the TempoStack:
+
+```bash
+export AWS_ACCESS_KEY_ID=$(oc get secret tempostorage -o jsonpath='{.data.AWS_ACCESS_KEY_ID}' | base64 --decode)
+export AWS_SECRET_ACCESS_KEY=$(oc get secret tempostorage -o jsonpath='{.data.AWS_SECRET_ACCESS_KEY}' | base64 --decode)
+envsubst < k8s/infra/tempostack.yml | oc apply -f -
+```
 
 #### Step 2: Tempo operator
 

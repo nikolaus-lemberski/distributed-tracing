@@ -87,10 +87,12 @@ spec:
   ports:
     - name: api
       port: 9000
-      targetPort: api
+      targetPort: 9000
+      protocol: TCP
     - name: console
       port: 9090
       targetPort: 9090
+      protocol: TCP
   selector:
     app: minio
 ---
@@ -105,6 +107,7 @@ metadata:
     app.kubernetes.io/part-of: minio
     component: minio
   name: minio-console
+  namespace: minio
 spec:
   port:
     targetPort: console
@@ -128,6 +131,7 @@ metadata:
     app.kubernetes.io/part-of: minio
     component: minio
   name: minio-s3
+  namespace: minio
 spec:
   port:
     targetPort: api
