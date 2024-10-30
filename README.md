@@ -40,6 +40,8 @@ Do not use this MinIO configuration for production workloads!
 
 Check the Route for your MinIO installation and open the console route in your browser. Login with minioadmin / minioadmin, create a bucket and an API key. For simplicity reasons create a bucket "tempostorage" and an access key "tempostorage" with secret key "tempostorage". Again, do not do that for production workloads.
 
+Then create the TempoStack:
+
 ```bash
 oc new-project tempostack
 export AWS_ACCESS_KEY_ID="tempostorage"
