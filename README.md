@@ -196,6 +196,6 @@ Then create the TempoStack:
 oc new-project tempostack
 export S3_ENDPOINT="http://minio.minio.svc:9000"
 export AWS_ACCESS_KEY_ID="tempostorage"
-export AWS_SECRET_ACCESS_KEY="tempostorage""
+export AWS_SECRET_ACCESS_KEY="tempostorage"
 envsubst < k8s/infra/tempostack.yml | oc apply -f -
 ```
