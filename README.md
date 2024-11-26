@@ -34,8 +34,8 @@ Then read the generated access keys and and export them as environment variables
 
 ```bash
 export S3_ENDPOINT="http://s3.openshift-storage.svc"
-export AWS_ACCESS_KEY_ID=$(oc get secret tempostorage -o jsonpath='{.data.AWS_ACCESS_KEY_ID}' | base64 --decode)
-export AWS_SECRET_ACCESS_KEY=$(oc get secret tempostorage -o jsonpath='{.data.AWS_SECRET_ACCESS_KEY}' | base64 --decode)
+export AWS_ACCESS_KEY_ID=$(oc get secret tempostorage -n tempostack -o jsonpath='{.data.AWS_ACCESS_KEY_ID}' | base64 --decode)
+export AWS_SECRET_ACCESS_KEY=$(oc get secret tempostorage -n tempostack -o jsonpath='{.data.AWS_SECRET_ACCESS_KEY}' | base64 --decode)
 ```
 
 ### TempoStack
