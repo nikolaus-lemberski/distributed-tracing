@@ -1,4 +1,4 @@
-<mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.17 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.17" pages="6">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36" version="28.2.5" pages="6">
   <diagram name="span" id="Ga6IgDGVINsFQRJGC9r3">
     <mxGraphModel dx="1306" dy="894" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
@@ -246,8 +246,8 @@
       </root>
     </mxGraphModel>
   </diagram>
-  <diagram name="tempo-jaeger" id="I5sil667HPHGwQt-xJle">
-    <mxGraphModel dx="1306" dy="894" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+  <diagram name="tempo-tracing-ui" id="I5sil667HPHGwQt-xJle">
+    <mxGraphModel dx="1018" dy="689" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
         <mxCell id="7CTmVkpAiIKgPCdikyf2-0" />
         <mxCell id="7CTmVkpAiIKgPCdikyf2-1" parent="7CTmVkpAiIKgPCdikyf2-0" />
@@ -317,7 +317,7 @@
             <mxPoint x="350" y="424" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="7CTmVkpAiIKgPCdikyf2-16" value="Jaeger UI" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=15;fillColor=#fff2cc;strokeColor=#d6b656;" parent="7CTmVkpAiIKgPCdikyf2-1" vertex="1">
+        <mxCell id="7CTmVkpAiIKgPCdikyf2-16" value="Distributed Tracing UI" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=15;fillColor=#fff2cc;strokeColor=#d6b656;" parent="7CTmVkpAiIKgPCdikyf2-1" vertex="1">
           <mxGeometry x="465" y="630" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="7CTmVkpAiIKgPCdikyf2-17" value="" style="endArrow=none;dashed=1;html=1;rounded=0;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;startArrow=none;startFill=0;" parent="7CTmVkpAiIKgPCdikyf2-1" source="7CTmVkpAiIKgPCdikyf2-16" target="7CTmVkpAiIKgPCdikyf2-14" edge="1">

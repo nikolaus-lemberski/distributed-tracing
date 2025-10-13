@@ -12,10 +12,25 @@ Each app responds with it's name and we do a downstream service call, so app-a c
 
 ## Setup the Tempo stack
 
-### Step 1: Tempo operator
+### Step 1: Operators
+
+#### Install the Tempo operator
 
 ```bash
 oc create -f k8s/infra/tempo-operator.yml
+```
+
+#### Install the Cluster Observability Operator
+
+In the web console, got to Operators -> OperatorHub und install the Cluster Observability Operator (accept defaults). When installed, to into the tab "UIPlugin" and create the UI plugin for distributed tracing:
+
+```yaml
+apiVersion: observability.openshift.io/v1alpha1
+kind: UIPlugin
+metadata:
+  name: distributed-tracing
+spec:
+  type: DistributedTracing
 ```
 
 ### Step 2: Setup storage and TempoStack
@@ -109,17 +124,11 @@ export ROUTE=http://$(oc get route app-a -o jsonpath='{.spec.host}')
 curl $ROUTE
 ```
 
-### Checking the traces with Jaeger UI
+### Checking the traces with Distributed Tracing UI
 
-With the Tempo stack operator comes Jaeger UI (you could also configure Grafana UI). Our desired flow of the metrics is:
+This is the how our distributed tracing should look now:
 
-![Sending metrics](./readme/tempo-jaeger.png "Sending metrics to Tempo with Jaeger UI")
-
-You can find the URL to Jaeger UI with:
-
-```bash
-oc get route -n tempostack
-```
+![Sending metrics](./readme/tempo-tracing-ui.png "Sending metrics to Tempo with Distributed Tracing UI")
 
 Apply the kustomizations for tracing - the instrumentation resources, the annotations to trigger the instrumentation in app-a and app-b and the change of the sampler ratio of the Quarkus app-c from 0% to 100%.
 
@@ -131,12 +140,13 @@ If you inspect the pods of app-a and app-b, you can see that the Java agent for 
 
 Hint: If the javaagent is missing but the annotations are there, simply delete the pods so they're recreated.
 
-Now call the app-a endpoint to generate some traces, open the Jeager UI (`oc get route -n tempostack`) in a Browser, select app-a and click on "Find traces". You should see the distributed tracing information:
+Now call the app-a endpoint to generate some traces, in **OpenShift**, navigate to ***Observe -> Traces***. Select the tempo instance "tempostack" and the tenant "demo.". You should see the distributed tracing information:
 
-![Traces](./readme/jaeger-traces.png "Traces in Jaeger UI")
+![Traces](./readme/openshift_tracing_ui.png "Traces in Distributed Tracing UI")
 
 ***If you don't see any traces:***
 * wait a few seconds and try again (reload), the observability does not work in realtime
+* check the pods of app-a and app-b, if the instrumentation has been applied (`oc describe pod app-a-xxxx`), if not, delete the pod, it's recreated and now the instrumentation should be there
 * check the logs of the OpenTelementry collector and maybe the TempoStack to find the cause of the problem
 
 ## Grafana Cloud

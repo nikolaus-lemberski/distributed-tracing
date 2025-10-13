@@ -8,7 +8,7 @@ kind: ClusterRole
 metadata:
   name: otel-collector
 rules:
-  - apiGroups: ["", "config.openshift.io", "apps"]
+  - apiGroups: ["", "config.openshift.io", "tempo.grafana.com", "apps"]
     resources: ["pods", "namespaces", "replicasets", "infrastructures", "infrastructures/status"]
     verbs: ["get", "watch", "list"]
 ---
@@ -25,21 +25,18 @@ roleRef:
   name: otel-collector
   apiGroup: rbac.authorization.k8s.io
 ---
-apiVersion: opentelemetry.io/v1alpha1
+apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
   name: otel
 spec:
   mode: deployment
   serviceAccount: otel-collector
-  config: |
+  config:
+    extensions:
+      bearertokenauth:
+        filename: "/var/run/secrets/kubernetes.io/serviceaccount/token"
     receivers:
-      jaeger:
-        protocols:
-          grpc: {}
-          thrift_binary: {}
-          thrift_compact: {}
-          thrift_http: {}
       opencensus: {}
       otlp:
         protocols:
@@ -56,13 +53,44 @@ spec:
       resourcedetection:
         detectors: [openshift]
     exporters:
-      otlp:
-        endpoint: "tempo-tempostack-distributor.tempostack.svc:4317" 
+      otlphttp:
+        endpoint: "https://tempo-tempostack-gateway.tempostack.svc.cluster.local:8080/api/traces/v1/demo"
         tls:
-          insecure: true
+          insecure: false
+          ca_file: "/var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt"
+        auth:
+          authenticator: bearertokenauth
     service:
+      extensions: [bearertokenauth]
       pipelines:
         traces:
-          receivers: [jaeger, opencensus, otlp, zipkin] 
+          receivers: [opencensus, otlp, zipkin] 
           processors: [memory_limiter, k8sattributes, resourcedetection, batch]
-          exporters: [otlp]
+          exporters: [otlphttp]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: tempostack-traces-write
+rules:
+  - apiGroups:
+      - 'tempo.grafana.com'
+    resources:
+      - demo
+    resourceNames:
+      - traces
+    verbs:
+      - 'create'
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: tempostack-traces
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: tempostack-traces-write
+subjects:
+  - kind: ServiceAccount
+    name: otel-collector
+    namespace: demo
