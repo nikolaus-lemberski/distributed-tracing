@@ -1,21 +1,16 @@
 # Build
-FROM --platform=linux/amd64 registry.access.redhat.com/ubi9/openjdk-17 as builder
+FROM --platform=linux/amd64 registry.access.redhat.com/ubi9/openjdk-21 as builder
 
 COPY pom.xml .
 COPY src src
 
-RUN mvn package
+RUN mvn -B package
 
 # Run
-FROM --platform=linux/amd64 registry.access.redhat.com/ubi8/openjdk-21:1.18
+FROM --platform=linux/amd64 registry.access.redhat.com/ubi9/openjdk-21-runtime
 
-COPY --from=builder --chown=185 /home/default/target/quarkus-app/lib/ /deployments/lib/
-COPY --from=builder --chown=185 /home/default/target/quarkus-app/*.jar /deployments/
-COPY --from=builder --chown=185 /home/default/target/quarkus-app/app/ /deployments/app/
-COPY --from=builder --chown=185 /home/default/target/quarkus-app/quarkus/ /deployments/quarkus/
+COPY --from=builder /home/default/target/app-c-1.0.0-SNAPSHOT-runner.jar .
 
 EXPOSE 8080
-USER 185
-ENV JAVA_APP_JAR="/deployments/quarkus-run.jar"
 
-ENTRYPOINT [ "/opt/jboss/container/java/run/run-java.sh" ]
+ENTRYPOINT ["java", "-jar", "app-c-1.0.0-SNAPSHOT-runner.jar"]
