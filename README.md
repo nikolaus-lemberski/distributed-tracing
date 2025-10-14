@@ -22,7 +22,7 @@ oc create -f k8s/infra/tempo-operator.yml
 
 #### Install the Cluster Observability Operator
 
-In the web console, got to Operators -> OperatorHub und install the Cluster Observability Operator (accept defaults). When installed, to into the tab "UIPlugin" and create the UI plugin for distributed tracing:
+In the web console, got to **Operators -> OperatorHub** und install the **Cluster Observability Operator** (accept defaults). When installed, to into the tab **UIPlugin** and create the UI plugin for distributed tracing:
 
 ```yaml
 apiVersion: observability.openshift.io/v1alpha1
