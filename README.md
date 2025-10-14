@@ -22,7 +22,7 @@ oc create -f k8s/infra/tempo-operator.yml
 
 #### Install the Cluster Observability Operator
 
-In the web console, got to **Operators -> OperatorHub** und install the **Cluster Observability Operator** (accept defaults). When installed, to into the tab **UIPlugin** and create the UI plugin for distributed tracing:
+In the web console, got to **Operators -> OperatorHub** und install the **Cluster Observability Operator** (accept defaults). When installed, switch to the tab **UIPlugin** and create the UI plugin for distributed tracing:
 
 ```yaml
 apiVersion: observability.openshift.io/v1alpha1
@@ -35,7 +35,7 @@ spec:
 
 ### Step 2: Setup storage and TempoStack
 
-Prerequisite: ODF is installed on OpenShift. If not, please install or use MinIO as alternative (instructions on the bottom of the page).
+Prerequisite: **ODF is installed** on OpenShift. If not, please install or use MinIO as alternative (instructions on the bottom of the page).
 
 #### Storage
 
@@ -62,10 +62,6 @@ envsubst < k8s/infra/tempostack.yml | oc apply -f -
 ```
 
 If you don't have _envsubst_, replace the values manually in _tempostack.yml_.
-
-### Open query frontend
-
-When all pods are running, check the Route `oc get route` and find the route for _tempo-tempostack-query-frontend_. Open it in a Browser and login via OpenShift. The query frontend is the Jaeger UI.
 
 ## Setup OpenTelemetry and sample apps
 
