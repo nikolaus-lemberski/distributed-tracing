@@ -44,6 +44,13 @@ async def page_not_found():
 async def extract_tracing_headers(request_headers):
     tracing_headers = [
         "x-request-id",
+        "x-ot-span-context",
+        "x-cloud-trace-context",
+        "x-datadog-trace-id",
+        "x-datadog-parent-id",
+        "x-datadog-sampling-priority",
+        "traceparent",
+        "tracestate",
         "x-b3-traceid",
         "x-b3-spanid",
         "x-b3-parentspanid",

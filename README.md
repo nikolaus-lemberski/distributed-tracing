@@ -218,16 +218,10 @@ Create the apps in the **meshapps** project:
 
 ```bash
 oc project meshapps
-oc apply -k k8s/base
+oc apply -k k8s/meshapps
 ```
 
-Now configure the Istio sidecar injection:
-
-```bash
-oc apply -k k8s/overlays/mesh
-```
-
-Verify that the pods are recreated and now they show in the "READY" column not 1/1 but 2/2. In each pod there are 2 containers now, the app container and the Envoy sidecar.
+Verify that the pods are created and show in the "READY" column not 1/1 but 2/2. In each pod there are 2 containers, the app container and the Envoy sidecar.
 
 ### Check tracing
 
@@ -237,10 +231,10 @@ An Istio Ingress-Gateway has been set up. Get the route to the gateway with:
 oc get route istio-ingressgateway -n istio-system
 ```
 
-Then call the Ingress gateway on path **/app-a** to generate some traffic.
+Then call the Ingress gateway on path **/mesh-app-a** to generate some traffic.
 
 ```bash
-while true; do curl <GATEWAY>/app-a; sleep 1; done;
+while true; do curl <GATEWAY>/mesh-app-a; sleep 5; done;
 ```
 
 Open the Distributed Tracing UI in OpenShift, select the "tempostack" instance and the "meshapps" tenant to see the traces.

@@ -1,7 +1,8 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
-  name: apps-gateway
+  name: meshapps-gateway
+  namespace: meshapps
 spec:
   selector:
     istio: ingressgateway
@@ -16,20 +17,21 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: app-a-gateway
+  name: mesh-app-a-gateway
+  namespace: meshapps
 spec:
   hosts:
   - "*"
   gateways:
-  - apps-gateway
+  - meshapps-gateway
   http:
   - match:
     - uri:
-        prefix: /app-a
+        prefix: /mesh-app-a
     rewrite:
       uri: /
     route:
     - destination:
-        host: app-a
+        host: mesh-app-a
         port:
           number: 8080

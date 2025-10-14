@@ -2,34 +2,34 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: app-c
-    app.kubernetes.io/component: app-c
-    app.kubernetes.io/instance: app-c
-    app.kubernetes.io/part-of: apps
-    app.openshift.io/runtime: quarkus
-  name: app-c
+    app: mesh-app-b
+    app.kubernetes.io/component: mesh-app-b
+    app.kubernetes.io/instance: mesh-app-b
+    app.kubernetes.io/part-of: meshapps
+    app.openshift.io/runtime: python
+  name: mesh-app-b
+  namespace: meshapps
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: app-c
+      app: mesh-app-b
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: app-c
+        app: mesh-app-b
         version: v1
+        sidecar.istio.io/inject: "true"
     spec:
       containers:
-        - image: quay.io/nlembers/distributed-tracing-app-c:latest
+        - image: quay.io/nlembers/distributed-tracing-mesh-app-b:latest
           imagePullPolicy: Always
-          name: app-c
+          name: mesh-app-b
           env:
-            - name: QUARKUS_HTTP_PORT
+            - name: PORT
               value: "8080"
-            - name: QUARKUS_OTEL_TRACES_SAMPLER_ARG
-              value: "0.0"
           ports:
             - containerPort: 8080
               name: http
@@ -47,8 +47,9 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: app-c
-  name: app-c
+    app: mesh-app-b
+  name: mesh-app-b
+  namespace: meshapps
 spec:
   ports:
     - name: http
@@ -56,6 +57,6 @@ spec:
       protocol: TCP
       targetPort: 8080
   selector:
-    app: app-c
+    app: mesh-app-b
   sessionAffinity: None
   type: ClusterIP

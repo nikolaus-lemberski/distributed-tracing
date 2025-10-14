@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/component: app-b
     app.kubernetes.io/instance: app-b
     app.kubernetes.io/part-of: apps
-    app.openshift.io/runtime: redhat
+    app.openshift.io/runtime: java
   name: app-b
 spec:
   replicas: 1
