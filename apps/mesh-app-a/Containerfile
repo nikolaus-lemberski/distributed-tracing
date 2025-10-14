@@ -1,0 +1,10 @@
+FROM --platform=linux/amd64 registry.access.redhat.com/ubi9/python-312-minimal
+
+WORKDIR /app
+
+COPY requirements.txt main.py /app/
+RUN python3 -m pip install --no-cache-dir --upgrade -r requirements.txt
+
+EXPOSE 8080
+
+CMD ["python3", "main.py"]

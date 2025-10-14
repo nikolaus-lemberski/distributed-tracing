@@ -32,5 +32,27 @@ services:
     environment:
       QUARKUS_HTTP_PORT: 8080
       QUARKUS_OTEL_TRACES_SAMPLER_ARG: 0.0
+  mesh-app-a:
+    build: ./mesh-app-a
+    image: distributed-tracing-mesh-app-a:latest
+    container_name: distributed-tracing-mesh-app-a
+    ports:
+      - "3003:8080"
+    networks:
+      - meshapps
+    environment:
+      PORT: 8080
+      MESH_APP_B: http://distributed-tracing-mesh-app-b:8080
+  mesh-app-b:
+    build: ./mesh-app-b
+    image: distributed-tracing-mesh-app-b:latest
+    container_name: distributed-tracing-mesh-app-b
+    ports:
+      - "3004:8080"
+    networks:
+      - meshapps
+    environment:
+      PORT: 8080
 networks:
   apps: {}
+  meshapps: {}
