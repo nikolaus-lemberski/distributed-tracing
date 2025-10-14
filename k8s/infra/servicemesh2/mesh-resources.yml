@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: istio-system
+---
+kind: ServiceMeshControlPlane
+apiVersion: maistra.io/v2
+metadata:
+  name: basic
+  namespace: istio-system
+spec:
+  version: v2.6
+  policy:
+    type: Istiod
+  telemetry:
+    type: Istiod
+  meshConfig:
+    extensionProviders:
+      - name: otel
+        opentelemetry:
+          port: 4317
+          service: otel-collector.meshapps.svc.cluster.local
+  addons:
+    prometheus:
+      enabled: true
+    kiali:
+      enabled: true
+    grafana:
+      enabled: true
+---
+kind: ServiceMeshMemberRoll
+apiVersion: maistra.io/v1
+metadata:
+  name: default
+  namespace: istio-system
+spec:
+  members:
+    - meshapps
+---
+apiVersion: telemetry.istio.io/v1alpha1
+kind: Telemetry
+metadata:
+  name: mesh-default
+  namespace: istio-system
+spec:
+  tracing:
+  - providers:
+    - name: otel
+    randomSamplingPercentage: 100

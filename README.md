@@ -186,6 +186,65 @@ Explore -> grafanacloud-\<username\>-traces -> Query type "Search".
 
 ![Traces](./readme/grafana-traces.png "Traces in Grafana UI")
 
+## Service Mesh
+
+We used OpenTelemetry instrumentation and SDK in our apps, to create and send the tracing data to the OpenTelementry collector. Now we configure OpenShift Service Mesh 2 to do that. It works the same with Service Mesh 3, but as many OpenShift users want to replace the **deprecated Jaeger** but for now not upgrade Service Mesh to version 3, we will show the combination of Service Mesh 2 with the Distributed Tracing Tempo stack and OpenTelemetry here.
+
+### Operator install
+
+Install in order: 
+* Kiali  
+Namespace: openshift-operators
+* Red Hat OpenShift Service Mesh 2  
+Namespace: openshift-operators
+
+### Setup Service Mesh
+
+First, create the **meshapps** namespace with the tempostack collector:
+
+```bash
+oc create -f k8s/infra/servicemesh2/tempostack-collector.yml
+```
+
+Then create the ServiceMeshControlPlane with the ServiceMeshMemberRoll:
+
+```bash
+oc create -f k8s/infra/servicemesh2/mesh-resources.yml
+```
+
+### Apps
+
+Create the apps in the **meshapps** project:
+
+```bash
+oc project meshapps
+oc apply -k k8s/base
+```
+
+Now configure the Istio sidecar injection:
+
+```bash
+oc apply -k k8s/overlays/mesh
+```
+
+Verify that the pods are recreated and now they show in the "READY" column not 1/1 but 2/2. In each pod there are 2 containers now, the app container and the Envoy sidecar.
+
+### Check tracing
+
+An Istio Ingress-Gateway has been set up. Get the route to the gateway with:
+
+```bash
+oc get route istio-ingressgateway -n istio-system
+```
+
+Then call the Ingress gateway on path **/app-a** to generate some traffic.
+
+```bash
+while true; do curl <GATEWAY>/app-a; sleep 1; done;
+```
+
+Open the Distributed Tracing UI in OpenShift, select the "tempostack" instance and the "meshapps" tenant to see the traces.
+
 ## MinIO storage option
 
 If you don't want to use ODF, you can use MinIO.

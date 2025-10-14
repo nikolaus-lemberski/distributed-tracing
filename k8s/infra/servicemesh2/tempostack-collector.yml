@@ -1,0 +1,105 @@
+apiVersion: project.openshift.io/v1
+kind: Project
+metadata:
+  labels:
+    kubernetes.io/metadata.name: meshapps
+    openshift.io/cluster-monitoring: "true"
+  name: meshapps
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: mesh-otel-collector
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: mesh-otel-collector
+rules:
+  - apiGroups: ["", "config.openshift.io", "tempo.grafana.com", "apps"]
+    resources: ["pods", "namespaces", "replicasets", "infrastructures", "infrastructures/status"]
+    verbs: ["get", "watch", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: mesh-otel-collector
+subjects:
+  - kind: ServiceAccount
+    name: mesh-otel-collector
+    namespace: meshapps
+roleRef:
+  kind: ClusterRole
+  name: mesh-otel-collector
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: opentelemetry.io/v1beta1
+kind: OpenTelemetryCollector
+metadata:
+  name: otel
+  namespace: meshapps
+spec:
+  mode: deployment
+  serviceAccount: mesh-otel-collector
+  config:
+    extensions:
+      bearertokenauth:
+        filename: "/var/run/secrets/kubernetes.io/serviceaccount/token"
+    receivers:
+      opencensus: {}
+      otlp:
+        protocols:
+          grpc: {}
+          http: {}
+      zipkin: {}
+    processors:
+      batch: {}
+      k8sattributes: {}
+      memory_limiter:
+        check_interval: 1s
+        limit_percentage: 50
+        spike_limit_percentage: 30
+      resourcedetection:
+        detectors: [openshift]
+    exporters:
+      otlphttp:
+        endpoint: "https://tempo-tempostack-gateway.tempostack.svc.cluster.local:8080/api/traces/v1/meshapps"
+        tls:
+          insecure: false
+          ca_file: "/var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt"
+        auth:
+          authenticator: bearertokenauth
+    service:
+      extensions: [bearertokenauth]
+      pipelines:
+        traces:
+          receivers: [opencensus, otlp, zipkin] 
+          processors: [memory_limiter, k8sattributes, resourcedetection, batch]
+          exporters: [otlphttp]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: mesh-tempostack-traces-write
+rules:
+  - apiGroups:
+      - 'tempo.grafana.com'
+    resources:
+      - meshapps
+    resourceNames:
+      - traces
+    verbs:
+      - 'create'
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: mesh-tempostack-traces
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: mesh-tempostack-traces-write
+subjects:
+  - kind: ServiceAccount
+    name: mesh-otel-collector
+    namespace: meshapps
