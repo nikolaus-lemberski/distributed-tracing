@@ -19,7 +19,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: otel-collector
-    namespace: demo
+    namespace: instapps
 roleRef:
   kind: ClusterRole
   name: otel-collector
@@ -54,7 +54,7 @@ spec:
         detectors: [openshift]
     exporters:
       otlphttp:
-        endpoint: "https://tempo-tempostack-gateway.tempostack.svc.cluster.local:8080/api/traces/v1/demo"
+        endpoint: "https://tempo-tempostack-gateway.tempostack.svc.cluster.local:8080/api/traces/v1/instapps"
         tls:
           insecure: false
           ca_file: "/var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt"
@@ -76,7 +76,7 @@ rules:
   - apiGroups:
       - 'tempo.grafana.com'
     resources:
-      - demo
+      - instapps
     resourceNames:
       - traces
     verbs:
@@ -93,4 +93,4 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: otel-collector
-    namespace: demo
+    namespace: instapps

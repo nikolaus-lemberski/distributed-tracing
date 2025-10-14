@@ -31,8 +31,10 @@ spec:
   tenants:
     mode: openshift
     authentication:
-      - tenantName: demo
-        tenantId: "demo-tenant"
+      - tenantName: instapps
+        tenantId: "instapps-tenant"
+      - tenantName: meshapps
+        tenantId: "meshapps-tenant"
   template:
     gateway:
       enabled: true
@@ -48,7 +50,8 @@ rules:
   - apiGroups:
       - 'tempo.grafana.com'
     resources:
-      - demo
+      - instapps
+      - meshapps
     resourceNames:
       - traces
     verbs:

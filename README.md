@@ -82,7 +82,7 @@ Alternatively install via OpenShift UI the **Red Hat build of OpenTelemetry** op
 ### Create new project
 
 ```bash
-oc new-project demo
+oc new-project instapps
 ```
 
 ### Create collector instance
@@ -140,7 +140,7 @@ If you inspect the pods of app-a and app-b, you can see that the Java agent for 
 
 Hint: If the javaagent is missing but the annotations are there, simply delete the pods so they're recreated.
 
-Now call the app-a endpoint to generate some traces, in **OpenShift**, navigate to ***Observe -> Traces***. Select the tempo instance "tempostack" and the tenant "demo.". You should see the distributed tracing information:
+Now call the app-a endpoint to generate some traces, in **OpenShift**, navigate to ***Observe -> Traces***. Select the tempo instance "tempostack" and the tenant "instapps.". You should see the distributed tracing information:
 
 ![Traces](./readme/openshift_tracing_ui.png "Traces in Distributed Tracing UI")
 
